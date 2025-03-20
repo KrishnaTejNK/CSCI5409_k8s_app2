@@ -5,3 +5,4 @@ steps:
     args: ['push', 'us-central1-docker.pkg.dev/csci5409kubernetesassignment/app2-repo/app2:latest']
 images:
   - 'us-central1-docker.pkg.dev/csci5409kubernetesassignment/app2-repo/app2:latest'
+logsBucket: 'gs://cloud-build-logs-csci5409kubernetesassignment'
