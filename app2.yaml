@@ -20,11 +20,10 @@ spec:
             - containerPort: 5000
           volumeMounts:
             - mountPath: "/krishna_PV_dir"
-              name: pv-storage
+              name: shared-storage
       volumes:
-        - name: pv-storage
-          persistentVolumeClaim:
-            claimName: pv-claim
+        - name: shared-storage
+          emptyDir: {}  # Replace PVC with emptyDir
 
 ---
 # Service for Container 2
