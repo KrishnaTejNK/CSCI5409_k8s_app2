@@ -1,27 +1,37 @@
-steps:
-  # Build the Docker image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/csci5409kubernetesassignment/app2-repo/app2:latest', '.']
-  # Push the Docker image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/csci5409kubernetesassignment/app2-repo/app2:latest']
-  # Authenticate with GKE
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      - 'container'
-      - 'clusters'
-      - 'get-credentials'
-      - 'my-gke-cluster'
-      - '--region'
-      - 'us-central1'
-      - '--project'
-      - 'csci5409kubernetesassignment'
-  # Deploy to GKE using kubectl
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'app2.yaml']
-    env:
-      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=my-gke-cluster'
-images:
-  - 'us-central1-docker.pkg.dev/csci5409kubernetesassignment/app2-repo/app2:latest'
-logsBucket: 'gs://cloud-build-logs-csci5409kubernetesassignment'
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app2-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app2
+  template:
+    metadata:
+      labels:
+        app: app2
+    spec:
+      containers:
+        - name: app2
+          image: us-central1-docker.pkg.dev/csci5409kubernetesassignment/app2-repo/app2:latest
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - mountPath: "/krishna_PV_dir"
+              name: shared-storage
+      volumes:
+        - name: shared-storage
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app2
+spec:
+  selector:
+    app: app2
+  ports:
+    - port: 5000
+      targetPort: 5000
+  type: ClusterIP
