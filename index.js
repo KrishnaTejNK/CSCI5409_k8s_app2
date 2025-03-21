@@ -9,7 +9,7 @@ const PV_DIR = '/krishna_PV_dir'; // Adjust if your first name differs
 
 app.post('/calculate', (req, res) => {
     const { file, product } = req.body;
-    console.log('Testing CI/CD');
+
 
     if (!file || !product) {
         return res.status(400).json({ file: file || null, error: 'Invalid JSON input.' });
