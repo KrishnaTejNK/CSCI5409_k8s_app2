@@ -20,7 +20,7 @@ app.post('/calculate', (req, res) => {
     if (!fs.existsSync(filePath)) {
         return res.status(404).json({ file, error: 'File not found.' });
     }
-    console.log('testing');
+    console.log('comment for testing!!');
     let sum = 0;
     let validCsv = true;
 
